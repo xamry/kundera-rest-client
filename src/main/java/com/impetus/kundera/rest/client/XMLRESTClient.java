@@ -31,7 +31,7 @@ import com.sun.jersey.api.client.config.DefaultClientConfig;
  * <Prove description of functionality provided by this Type> 
  * @author amresh.singh
  */
-public class KunderaRESTClient
+public class XMLRESTClient implements RESTClient
 {
     
     public static void main(String[] args)
@@ -40,7 +40,7 @@ public class KunderaRESTClient
         ClientConfig config = new DefaultClientConfig();
         Client client = Client.create(config);
         
-        URI uri = UriBuilder.fromUri("http://localhost:8080/kundera-webtest").build();
+        URI uri = UriBuilder.fromUri("http://localhost:8080/Kundera-Web-Examples").build();
         WebResource service = client.resource(uri);
         
         //Get Application Token
@@ -70,9 +70,9 @@ public class KunderaRESTClient
      */
     private static void deleteBook(WebResource service, String sessionToken, String updatedBook)
     {
-        WebResource.Builder deleteBuilder = service.path("rest").path("kundera/api/crud/" + sessionToken + "/Book/delete/34523423423423").accept(MediaType.APPLICATION_XML);              
-        deleteBuilder.delete(String.class, updatedBook);
-        //System.out.println(deleteResponse);
+        WebResource.Builder deleteBuilder = service.path("rest").path("kundera/api/crud/" + sessionToken + "/Book/delete/" + "34523423423423").accept(MediaType.TEXT_PLAIN);              
+        String deleteResponse = deleteBuilder.delete(String.class);
+        System.out.println(deleteResponse);
     }
 
     /**
