@@ -1,3 +1,16 @@
+package com.impetus.kundera.rest.client;
+
+import java.net.URI;
+
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriBuilder;
+
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.WebResource;
+import com.sun.jersey.api.client.config.ClientConfig;
+import com.sun.jersey.api.client.config.DefaultClientConfig;
+
 /**
  * Copyright 2012 Impetus Infotech.
  *
@@ -13,26 +26,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.impetus.kundera.rest.client;
-
-import java.net.URI;
-
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.UriBuilder;
-
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.api.client.config.ClientConfig;
-import com.sun.jersey.api.client.config.DefaultClientConfig;
 
 /**
- * <Prove description of functionality provided by this Type>
- * 
+ * <Prove description of functionality provided by this Type> 
  * @author amresh.singh
  */
-public class XMLRESTClient implements RESTClient
+public class JSONRESTClient implements RESTClient
 {
+    
     private WebResource webResource = null;
 
     @Override
@@ -93,13 +94,13 @@ public class XMLRESTClient implements RESTClient
     }
 
     @Override
-    public String insertBook(String sessionToken, String bookXML)
+    public String insertBook(String sessionToken, String bookJSON)
     {
         System.out.println("Saving Entity...");
         WebResource.Builder insertBuilder = webResource.path("rest").path("kundera/api/crud/" + sessionToken + "/Book")
-                .type(MediaType.APPLICATION_XML).accept(MediaType.TEXT_PLAIN);
+                .type(MediaType.APPLICATION_JSON).accept(MediaType.TEXT_PLAIN);
         StringBuffer sb = new StringBuffer()
-                .append(bookXML);
+                .append(bookJSON);
         String insertResponse = insertBuilder.post(String.class, sb.toString());
         System.out.println(insertResponse);
         return insertResponse;
@@ -109,23 +110,22 @@ public class XMLRESTClient implements RESTClient
     public String findBook(String sessionToken)
     {
         WebResource.Builder findBuilder = webResource.path("rest")
-                .path("kundera/api/crud/" + sessionToken + "/Book/34523423423423").accept(MediaType.APPLICATION_XML);
-        // String findResponse =
-        // findBuilder.get(ClientResponse.class).toString();
-        String bookXML = findBuilder.get(String.class);
+                .path("kundera/api/crud/" + sessionToken + "/Book/34523423423423").accept(MediaType.APPLICATION_JSON);
+
+        String bookJSON = findBuilder.get(String.class);
         // System.out.println(findResponse);
-        System.out.println(bookXML);
-        return bookXML;
+        System.out.println(bookJSON);
+        return bookJSON;
     }
 
     @Override
-    public String updateBook(String sessionToken, String oldBookXML)
+    public String updateBook(String sessionToken, String oldBookJSON)
     {
-        oldBookXML = oldBookXML.replaceAll("Amresh", "Saurabh");
-        System.out.println("Updating Entity... " + oldBookXML);
+        oldBookJSON = oldBookJSON.replaceAll("Amresh", "Saurabh");
+        System.out.println("Updating Entity... " + oldBookJSON);
         WebResource.Builder updateBuilder = webResource.path("rest").path("kundera/api/crud/" + sessionToken + "/Book")
-                .type(MediaType.APPLICATION_XML).accept(MediaType.APPLICATION_XML);
-        String updateResponse = updateBuilder.put(String.class, oldBookXML);
+                .type(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON);
+        String updateResponse = updateBuilder.put(String.class, oldBookJSON);
         System.out.println(updateResponse);
         return updateResponse;
     }
@@ -138,6 +138,6 @@ public class XMLRESTClient implements RESTClient
                 .accept(MediaType.TEXT_PLAIN);
         String deleteResponse = deleteBuilder.delete(String.class);
         System.out.println(deleteResponse);
-    }
+    } 
 
 }

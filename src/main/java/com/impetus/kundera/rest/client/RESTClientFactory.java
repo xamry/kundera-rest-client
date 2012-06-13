@@ -1,5 +1,3 @@
-import com.impetus.kundera.rest.client.RESTClient;
-
 /**
  * Copyright 2012 Impetus Infotech.
  *
@@ -15,12 +13,22 @@ import com.impetus.kundera.rest.client.RESTClient;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.impetus.kundera.rest.client;
 
 /**
- * <Prove description of functionality provided by this Type> 
+ * Factory for {@link RESTClient} 
  * @author amresh.singh
  */
-public class JSONRESTClient implements RESTClient
+public class RESTClientFactory
 {
+    public static RESTClient getRESTClient(String clientType) {
+        if("XML".equals(clientType)) {
+            return new XMLRESTClient();
+        } else if("JSON".equals(clientType)) {
+            return new JSONRESTClient();
+        } else {
+            return null;
+        }
+    }
 
 }

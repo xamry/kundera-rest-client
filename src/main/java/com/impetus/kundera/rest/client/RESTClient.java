@@ -15,11 +15,25 @@
  */
 package com.impetus.kundera.rest.client;
 
+
 /**
  * <Prove description of functionality provided by this Type> 
  * @author amresh.singh
  */
 public interface RESTClient
-{
+{    
+    
+    void initialize(String urlString);
+    
+    String getApplicationToken();  
+    void closeApplication(String applicationToken);
+    
+    String getSessionToken(String applicationToken);  
+    void closeSession(String sessionToken);
+    
+    String insertBook(String sessionToken, String book);
+    String findBook(String sessionToken);
+    String updateBook(String sessionToken, String oldBook);
+    void deleteBook(String sessionToken, String updatedBook); 
 
 }
