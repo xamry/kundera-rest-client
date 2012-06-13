@@ -1,0 +1,34 @@
+Usage
+==========================================
+create keyspace KunderaExamples;
+use KunderaExamples;
+drop column family BOOK;
+create column family BOOK with comparator=UTF8Type and default_validation_class=UTF8Type and key_validation_class=UTF8Type;
+describe KunderaExamples;
+
+Get Application Token:
+http://localhost:8080/Kundera-Web-Examples/rest/kundera/api/application/pu/twissandra
+
+Get Session Token:
+http://localhost:8080/Kundera-Web-Examples/rest/kundera/api/session/at/AT_111d8ba4-16c8-4d4d-9ee9-7715574c69f3
+
+Insert Record:
+http://localhost:8080/Kundera-Web-Examples/rest/kundera/api/crud/ST_192db237-9453-48ca-a8f3-6f24cdb4197a/Book
+<book><isbn>34523423423423</isbn><author>Amresh</author><publication>Willey</publication></book>
+
+Find Record:
+http://localhost:8080/Kundera-Web-Examples/rest/kundera/api/crud/ST_192db237-9453-48ca-a8f3-6f24cdb4197a/Book/34523423423423
+
+Update Record:
+http://localhost:8080/Kundera-Web-Examples/rest/kundera/api/crud/ST_192db237-9453-48ca-a8f3-6f24cdb4197a/Book
+<book><isbn>34523423423423</isbn><author>Saurabh</author><publication>Willey</publication></book>
+
+
+Delete Record:
+http://localhost:8080/Kundera-Web-Examples/rest/kundera/api/crud/ST_192db237-9453-48ca-a8f3-6f24cdb4197a/Book/delete/34523423423423
+
+Close Session:
+http://localhost:8080/Kundera-Web-Examples/rest/
+
+Close Application:
+http://localhost:8080/Kundera-Web-Examples/rest/
