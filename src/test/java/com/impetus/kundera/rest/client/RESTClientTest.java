@@ -34,8 +34,13 @@ public class RESTClientTest extends TestCase
     {
         super.tearDown();
     }
+    
+    public void test() {
+        xmlCRUD();
+        //jsonCRUD();
+    }
 
-   /* public void testXML()
+    public void xmlCRUD()
     {
         RESTClient restClient = RESTClientFactory.getRESTClient("XML");
 
@@ -69,9 +74,9 @@ public class RESTClientTest extends TestCase
 
         // Close Application
         restClient.closeApplication(applicationToken);
-    }*/
+    }
     
-    public void testJSON()
+    public void jsonCRUD()
     {
         RESTClient restClient = RESTClientFactory.getRESTClient("JSON");
 
