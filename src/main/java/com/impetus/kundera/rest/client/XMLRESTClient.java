@@ -18,6 +18,7 @@ package com.impetus.kundera.rest.client;
 import java.net.URI;
 
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
 import com.sun.jersey.api.client.Client;
@@ -97,12 +98,12 @@ public class XMLRESTClient implements RESTClient
     {
         System.out.println("Saving Entity...");
         WebResource.Builder insertBuilder = webResource.path("rest").path("kundera/api/crud/" + sessionToken + "/Book")
-                .type(MediaType.APPLICATION_XML).accept(MediaType.TEXT_PLAIN);
+                .type(MediaType.APPLICATION_XML).accept(MediaType.APPLICATION_OCTET_STREAM);
         StringBuffer sb = new StringBuffer()
                 .append(bookXML);
-        String insertResponse = insertBuilder.post(String.class, sb.toString());
-        System.out.println(insertResponse);
-        return insertResponse;
+        ClientResponse insertResponse = (ClientResponse)insertBuilder.post(ClientResponse.class, sb.toString());
+        System.out.println("Response From INsert Book: " + insertResponse);
+        return insertResponse.toString();
     }
 
     @Override
