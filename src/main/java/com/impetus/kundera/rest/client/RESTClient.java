@@ -15,6 +15,8 @@
  */
 package com.impetus.kundera.rest.client;
 
+import javax.ws.rs.core.MediaType;
+
 
 /**
  * <Prove description of functionality provided by this Type> 
@@ -23,7 +25,7 @@ package com.impetus.kundera.rest.client;
 public interface RESTClient
 {    
     
-    void initialize(String urlString);
+    void initialize(String urlString, String mediaType);
     
     String getApplicationToken();  
     void closeApplication(String applicationToken);
@@ -32,8 +34,8 @@ public interface RESTClient
     void closeSession(String sessionToken);
     
     String insertBook(String sessionToken, String book);
-    String findBook(String sessionToken);
+    String findBook(String sessionToken, String isbn);
     String updateBook(String sessionToken, String oldBook);
-    void deleteBook(String sessionToken, String updatedBook); 
+    void deleteBook(String sessionToken, String updatedBook, String isbn); 
 
 }

@@ -1,3 +1,18 @@
+/**
+ * Copyright 2012 Impetus Infotech.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.impetus.kundera.rest.client;
 
 import java.io.InputStream;
@@ -14,38 +29,25 @@ import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
 
 /**
- * Copyright 2012 Impetus Infotech.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-/**
- * <Prove description of functionality provided by this Type> 
+ * <Prove description of functionality provided by this Type>
+ * 
  * @author amresh.singh
  */
-public class JSONRESTClient implements RESTClient
+public class RESTClientImpl implements RESTClient
 {
-    
     private WebResource webResource = null;
+    private String mediaType;
 
     @Override
-    public void initialize(String urlString)
+    public void initialize(String urlString, String mediaType)
     {
         ClientConfig config = new DefaultClientConfig();
         Client client = Client.create(config);
 
         URI uri = UriBuilder.fromUri(urlString).build();
-        webResource = client.resource(uri);
+        this.webResource = client.resource(uri);
+        this.mediaType = mediaType;
+        
     } 
 
     @Override
@@ -97,54 +99,54 @@ public class JSONRESTClient implements RESTClient
     
 
     @Override
-    public String insertBook(String sessionToken, String bookJSON)
+    public String insertBook(String sessionToken, String bookStr)
     {
         System.out.println("\n\nInserting Entity...");
         WebResource.Builder insertBuilder = webResource.path("rest").path("kundera/api/crud/" + sessionToken + "/Book")
-                .type(MediaType.APPLICATION_XML).accept(MediaType.APPLICATION_OCTET_STREAM);
+                .type(mediaType).accept(MediaType.APPLICATION_OCTET_STREAM);
         StringBuffer sb = new StringBuffer()
-                .append(bookJSON);
+                .append(bookStr);
         ClientResponse insertResponse = (ClientResponse)insertBuilder.post(ClientResponse.class, sb.toString());
         System.out.println("Response From Insert Book: " + insertResponse);
         return insertResponse.toString();
     }
 
     @Override
-    public String findBook(String sessionToken)
+    public String findBook(String sessionToken, String isbn)
     {
         System.out.println("\n\nFinding Entity...");
         WebResource.Builder findBuilder = webResource.path("rest")
-                .path("kundera/api/crud/" + sessionToken + "/Book/34523423423423").accept(MediaType.APPLICATION_XML);
+                .path("kundera/api/crud/" + sessionToken + "/Book/" + isbn).accept(mediaType);
         
         ClientResponse findResponse = (ClientResponse)findBuilder.get(ClientResponse.class);
         
         InputStream is = findResponse.getEntityInputStream();
-        String bookJSON = StreamUtils.toString(is);  
+        String bookStr = StreamUtils.toString(is);  
         
-        System.out.println("Found Entity:" + bookJSON);
-        return bookJSON;
+        System.out.println("Found Entity:" + bookStr);
+        return bookStr;
     }
 
     @Override
-    public String updateBook(String sessionToken, String oldBookJSON)
+    public String updateBook(String sessionToken, String oldBookStr)
     {
-        System.out.println("\n\nUpdating Entity... " + oldBookJSON);
-        oldBookJSON = oldBookJSON.replaceAll("Amresh", "Saurabh");        
+        System.out.println("\n\nUpdating Entity... " + oldBookStr);
+        oldBookStr = oldBookStr.replaceAll("Amresh", "Saurabh");        
         WebResource.Builder updateBuilder = webResource.path("rest").path("kundera/api/crud/" + sessionToken + "/Book")
-                .type(MediaType.APPLICATION_XML).accept(MediaType.APPLICATION_XML);
-        ClientResponse updateResponse = updateBuilder.put(ClientResponse.class, oldBookJSON);
+                .type(mediaType).accept(mediaType);
+        ClientResponse updateResponse = updateBuilder.put(ClientResponse.class, oldBookStr);
         InputStream is = updateResponse.getEntityInputStream();
-        String updatedBook = StreamUtils.toString(is);
-        System.out.println("Updated Book: " + updatedBook);
-        return updatedBook;
+        String updatedBookStr = StreamUtils.toString(is);
+        System.out.println("Updated Book: " + updatedBookStr);
+        return updatedBookStr;
     }
 
     @Override
-    public void deleteBook(String sessionToken, String updatedBook)
+    public void deleteBook(String sessionToken, String updatedBook, String isbn)
     {
         System.out.println("\n\nDeleting Entity... " + updatedBook);
         WebResource.Builder deleteBuilder = webResource.path("rest")
-                .path("kundera/api/crud/" + sessionToken + "/Book/delete/" + "34523423423423")
+                .path("kundera/api/crud/" + sessionToken + "/Book/delete/" + isbn)
                 .accept(MediaType.TEXT_PLAIN);
         ClientResponse deleteResponse = (ClientResponse) deleteBuilder.delete(ClientResponse.class);
         System.out.println("Delete Response:" + deleteResponse.getStatus());

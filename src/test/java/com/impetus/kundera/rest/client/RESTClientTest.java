@@ -15,21 +15,32 @@
  */
 package com.impetus.kundera.rest.client;
 
+import javax.ws.rs.core.MediaType;
+
 import junit.framework.TestCase;
 
 /**
- * <Prove description of functionality provided by this Type>
- * 
+ * Test case for {@link RESTClient} 
  * @author amresh.singh
  */
 public class RESTClientTest extends TestCase
 {
 
     private static final String WS_URL = "http://localhost:8080/Kundera-Web-Examples";
+    RESTClient restClient;
+    
+    String applicationToken = null;
+    String sessionToken = null;     
+    
+    String bookStr;
+    String pk;
+    
 
     protected void setUp() throws Exception
     {
         super.setUp();
+        restClient = new RESTClientImpl();        
+        
     }
 
     protected void tearDown() throws Exception
@@ -38,21 +49,26 @@ public class RESTClientTest extends TestCase
     }
     
     public void test() {
-        xmlCRUD();
+        //crud(MediaType.APPLICATION_XML);
+        crud(MediaType.APPLICATION_JSON);
         
-        
-        //jsonCRUD();
     }
 
-    public void xmlCRUD()
-    {
-        RESTClient restClient = RESTClientFactory.getRESTClient("XML");
-        String applicationToken = null;
-        String sessionToken = null;        
-        
+    public void crud(String mediaType)
+    {     
+        if(MediaType.APPLICATION_XML.equals(mediaType)) {
+            bookStr = "<book><isbn>34523423423423</isbn><author>Amresh</author><publication>Willey</publication></book>";
+            pk = "34523423423423";
+        } else if(MediaType.APPLICATION_JSON.equals(mediaType)) {
+            bookStr = "{book:{\"isbn\":\"2222\",\"author\":\"Kuldeep\", \"publication\":\"McGraw\"}}";
+            pk = "2222";
+        } else {
+            fail("Incorrect Media Type:" + mediaType);
+            return;
+        }       
         
         // Initialize REST Client
-        restClient.initialize(WS_URL);
+        restClient.initialize(WS_URL, mediaType);
 
         // Get Application Token
         applicationToken = restClient.getApplicationToken();
@@ -62,61 +78,24 @@ public class RESTClientTest extends TestCase
         
         
         // Insert Record        
-        restClient.insertBook(sessionToken, "<book><isbn>34523423423423</isbn><author>Amresh</author><publication>Willey</publication></book>");
+        restClient.insertBook(sessionToken, bookStr);
         
         // Find Record
-        String bookXML = restClient.findBook(sessionToken);
-        System.out.println("found book:" + bookXML);
+        String foundBook = restClient.findBook(sessionToken, pk);
+        System.out.println("found book:" + foundBook);
 
         // Update Record        
-        String updatedBookXML = restClient.updateBook(sessionToken, bookXML);
-        System.out.println("updatedBook:" + updatedBookXML);
+        String updatedBook = restClient.updateBook(sessionToken, foundBook);
+        System.out.println("updatedBook:" + updatedBook);
 
         // Delete Record        
-        restClient.deleteBook(sessionToken, updatedBookXML);
+        restClient.deleteBook(sessionToken, updatedBook, pk);
 
         // Close Session
         restClient.closeSession(sessionToken);
 
         // Close Application        
         restClient.closeApplication(applicationToken);
-    }
-    
-    /*public void jsonCRUD()
-    {
-        RESTClient restClient = RESTClientFactory.getRESTClient("JSON");
-
-        // Initialize REST Client
-        restClient.initialize(WS_URL);
-
-        // Get Application Token
-        String applicationToken = restClient.getApplicationToken();
-
-        // Get Session Token
-        String sessionToken = restClient.getSessionToken(applicationToken);
-
-        // Insert Record
-        restClient.insertBook(sessionToken, "{\"isbn\":\"2222\",\"author\":\"Kuldeep\", \"publication\":\"McGraw\"}");
-        
-        
-        // Find Record
-        String bookJSON = restClient.findBook(sessionToken);
-        System.out.println("found book:" + bookJSON);
-
-        // Update Record
-
-        String updatedBookXML = restClient.updateBook(sessionToken, bookJSON);
-        System.out.println("updatedBook:" + updatedBookXML);
-
-        // Delete Record
-        restClient.deleteBook(sessionToken, updatedBookXML);
-
-        // Close Session
-
-        restClient.closeSession(sessionToken);
-
-        // Close Application
-        restClient.closeApplication(applicationToken);
-    }*/
-
+    }  
+  
 }
