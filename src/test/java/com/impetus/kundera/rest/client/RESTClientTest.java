@@ -49,7 +49,7 @@ public class RESTClientTest extends TestCase
     }
     
     public void test() {
-        //crud(MediaType.APPLICATION_XML);
+        crud(MediaType.APPLICATION_XML);
         crud(MediaType.APPLICATION_JSON);
         
     }
