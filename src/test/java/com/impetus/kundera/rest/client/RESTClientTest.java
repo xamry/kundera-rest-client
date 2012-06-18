@@ -25,6 +25,8 @@ import junit.framework.TestCase;
 public class RESTClientTest extends TestCase
 {
 
+    private static final String WS_URL = "http://localhost:8080/Kundera-Web-Examples";
+
     protected void setUp() throws Exception
     {
         super.setUp();
@@ -37,51 +39,55 @@ public class RESTClientTest extends TestCase
     
     public void test() {
         xmlCRUD();
+        
+        
         //jsonCRUD();
     }
 
     public void xmlCRUD()
     {
         RESTClient restClient = RESTClientFactory.getRESTClient("XML");
-
+        String applicationToken = null;
+        String sessionToken = null;        
+        
+        
         // Initialize REST Client
-        restClient.initialize("http://localhost:8080/Kundera-Web-Examples");
+        restClient.initialize(WS_URL);
 
         // Get Application Token
-        String applicationToken = restClient.getApplicationToken();
+        applicationToken = restClient.getApplicationToken();
 
-        // Get Session Token
-        String sessionToken = restClient.getSessionToken(applicationToken);
-
-        // Insert Record
+        // Get Session Token        
+        sessionToken = restClient.getSessionToken(applicationToken);
+        
+        
+        // Insert Record        
         restClient.insertBook(sessionToken, "<book><isbn>34523423423423</isbn><author>Amresh</author><publication>Willey</publication></book>");
-
+        
         // Find Record
         String bookXML = restClient.findBook(sessionToken);
         System.out.println("found book:" + bookXML);
 
-        // Update Record
-
+        // Update Record        
         String updatedBookXML = restClient.updateBook(sessionToken, bookXML);
         System.out.println("updatedBook:" + updatedBookXML);
 
-        // Delete Record
+        // Delete Record        
         restClient.deleteBook(sessionToken, updatedBookXML);
 
         // Close Session
-
         restClient.closeSession(sessionToken);
 
-        // Close Application
+        // Close Application        
         restClient.closeApplication(applicationToken);
     }
     
-    public void jsonCRUD()
+    /*public void jsonCRUD()
     {
         RESTClient restClient = RESTClientFactory.getRESTClient("JSON");
 
         // Initialize REST Client
-        restClient.initialize("http://localhost:8080/Kundera-Web-Examples");
+        restClient.initialize(WS_URL);
 
         // Get Application Token
         String applicationToken = restClient.getApplicationToken();
@@ -94,12 +100,12 @@ public class RESTClientTest extends TestCase
         
         
         // Find Record
-        String bookXML = restClient.findBook(sessionToken);
-        System.out.println("found book:" + bookXML);
+        String bookJSON = restClient.findBook(sessionToken);
+        System.out.println("found book:" + bookJSON);
 
         // Update Record
 
-        String updatedBookXML = restClient.updateBook(sessionToken, bookXML);
+        String updatedBookXML = restClient.updateBook(sessionToken, bookJSON);
         System.out.println("updatedBook:" + updatedBookXML);
 
         // Delete Record
@@ -111,6 +117,6 @@ public class RESTClientTest extends TestCase
 
         // Close Application
         restClient.closeApplication(applicationToken);
-    }
+    }*/
 
 }
