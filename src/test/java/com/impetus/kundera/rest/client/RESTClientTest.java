@@ -82,6 +82,11 @@ public class RESTClientTest extends TestCase
         
         // Find Record
         String foundBook = restClient.findBook(sessionToken, pk);
+        System.out.println("Before book " + foundBook);
+        if(MediaType.APPLICATION_JSON.equals(mediaType)) {
+            foundBook = "{book:" + foundBook + "}";
+        }       
+        
         System.out.println("found book:" + foundBook);
 
         // Update Record        
