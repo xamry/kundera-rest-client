@@ -50,7 +50,7 @@ public class RESTClientTest extends TestCase
     
     public void test() {
         crud(MediaType.APPLICATION_XML);
-        crud(MediaType.APPLICATION_JSON);
+        //crud(MediaType.APPLICATION_JSON);
         
     }
 
@@ -92,9 +92,12 @@ public class RESTClientTest extends TestCase
         // Update Record        
         String updatedBook = restClient.updateBook(sessionToken, foundBook);
         System.out.println("updatedBook:" + updatedBook);
+        
+        //Get All Books
+        String allBooks = restClient.getAllBooks(sessionToken);
 
         // Delete Record        
-        restClient.deleteBook(sessionToken, updatedBook, pk);
+        restClient.deleteBook(sessionToken, updatedBook, pk);       
 
         // Close Session
         restClient.closeSession(sessionToken);

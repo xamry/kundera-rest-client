@@ -15,7 +15,9 @@
  */
 package com.impetus.kundera.rest.client;
 
-import javax.ws.rs.core.MediaType;
+import java.util.List;
+
+import com.impetus.kundera.rest.common.Book;
 
 
 /**
@@ -37,5 +39,5 @@ public interface RESTClient
     String findBook(String sessionToken, String isbn);
     String updateBook(String sessionToken, String oldBook);
     void deleteBook(String sessionToken, String updatedBook, String isbn); 
-
+    String getAllBooks(String sessionToken); 
 }

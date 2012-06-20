@@ -17,6 +17,7 @@ package com.impetus.kundera.rest.client;
 
 import java.io.InputStream;
 import java.net.URI;
+import java.util.List;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
@@ -151,5 +152,22 @@ public class RESTClientImpl implements RESTClient
         ClientResponse deleteResponse = (ClientResponse) deleteBuilder.delete(ClientResponse.class);
         System.out.println("Delete Response:" + deleteResponse.getStatus());
     }
+
+    @Override
+    public String getAllBooks(String sessionToken)
+    {
+        System.out.println("\n\nFinding all Entities... ");
+        WebResource.Builder queryBuilder = webResource.path("rest")
+                .path("kundera/api/query/" + sessionToken + "/Book/all")
+                .accept(mediaType);
+        ClientResponse queryResponse = (ClientResponse) queryBuilder.get(List.class);
+        System.out.println("Find All Response:" + queryResponse.getStatus());
+        
+        InputStream is = queryResponse.getEntityInputStream();
+        String allBookStr = StreamUtils.toString(is);  
+        
+        System.out.println("Found All Entities:" + allBookStr);
+        return allBookStr;
+    }  
 
 }
